@@ -72,14 +72,8 @@ def get_results():
   except Exception as e:
     logging.error(f"Picone API call failed: {e}")
     return jsonify({'error': 'Error calling Picone API'}), 500
-
-  results = picone_response.matches
-
-  ids = ''
-  for result in results:
-    ids += result.id + ', '
-  ids = ids[:-2]
-  return jsonify({'ids': ids})
+  metadata_texts = [match['metadata']['text'] for match in picone_response['matches'] if 'metadata' in match and 'text' in match['metadata']]
+  return jsonify({'metadata_texts': metadata_texts}), 200
 
 
 if __name__ == '__main__':
